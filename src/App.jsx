@@ -1,13 +1,21 @@
 import { useState } from 'react'
+import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom'
 import './App.css'
 import logo from './assets/logo.svg'
+import IdentityVerification from './components/IdentityVerification'
 
-function App() {
+function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
   const togglePassword = (e) => {
     e.preventDefault();
     setShowPassword(!showPassword);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    navigate('/verify');
   };
 
   return (
@@ -25,7 +33,7 @@ function App() {
       <main className="login-page">
         <section className="login-container">
           <div className="login-card">
-            <form className="login-form">
+            <form className="login-form" onSubmit={handleSubmit}>
               <div className="input-group">
                 <label htmlFor="username">Username</label>
                 <input type="text" id="username" name="username" required />
@@ -74,7 +82,7 @@ function App() {
 
       <footer className="main-footer">
         <div className="social-icons">
-          <a href="#"><i className="fa-brands fa-facebook"></i></a>
+          <a href="#"><i className="fa-brands fa-square-facebook"></i></a>
           <a href="#"><i className="fa-brands fa-instagram"></i></a>
           <a href="#"><i className="fa-brands fa-x-twitter"></i></a>
           <a href="#"><i className="fa-brands fa-youtube"></i></a>
@@ -106,6 +114,17 @@ function App() {
         </div>
       </footer>
     </div>
+  );
+}
+
+function App() {
+  return (
+    <BrowserRouter>
+      <Routes>
+        <Route path="/" element={<LoginPage />} />
+        <Route path="/verify" element={<IdentityVerification />} />
+      </Routes>
+    </BrowserRouter>
   )
 }
 

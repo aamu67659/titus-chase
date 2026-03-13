@@ -186,6 +186,148 @@ body {
     text-align: center;
 }
 
+/* Identity Verification Page */
+.identity-page {
+    min-height: 100vh;
+    background-color: #fff;
+    display: flex;
+    flex-direction: column;
+}
+
+.identity-header {
+    background-color: #0659a5;
+    padding: 15px 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.identity-logo svg {
+    height: 30px;
+    width: auto;
+}
+
+.identity-content {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    padding-top: 40px;
+}
+
+.content-wrapper {
+    width: 100%;
+    max-width: 600px;
+    padding: 0 20px;
+}
+
+.small-title {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 30px;
+    font-weight: 600;
+}
+
+.large-title {
+    font-size: 32px;
+    font-weight: 300;
+    color: #212121;
+    margin-bottom: 25px;
+}
+
+.description {
+    font-size: 16px;
+    color: #333;
+    margin-bottom: 30px;
+    line-height: 1.4;
+}
+
+.verification-options {
+    border-top: 1px solid #ddd;
+    margin-bottom: 30px;
+}
+
+.option-item {
+    display: flex;
+    align-items: center;
+    padding: 20px 0;
+    border-bottom: 1px solid #ddd;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.option-item:hover {
+    background-color: #f9f9f9;
+}
+
+.option-icon {
+    width: 48px;
+    height: 48px;
+    background-color: #eaf3f9;
+    border-radius: 50%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-right: 20px;
+    color: #0060ac;
+    font-size: 20px;
+}
+
+.option-details {
+    flex: 1;
+}
+
+.option-details h3 {
+    font-size: 16px;
+    font-weight: 400;
+    color: #333;
+    margin-bottom: 4px;
+}
+
+.option-details p {
+    font-size: 14px;
+    color: #666;
+}
+
+.arrow-icon {
+    color: #666;
+    font-size: 14px;
+}
+
+.help-link {
+    display: inline-flex;
+    align-items: center;
+    color: #0060ac;
+    text-decoration: none;
+    font-size: 16px;
+    margin-bottom: 50px;
+}
+
+.help-link i {
+    font-size: 14px;
+    margin-left: 10px;
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: flex-end;
+}
+
+.cancel-btn {
+    padding: 10px 40px;
+    background-color: transparent;
+    border: 1px solid #0060ac;
+    color: #0060ac;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: background-color 0.2s;
+}
+
+.cancel-btn:hover {
+    background-color: #f0f7ff;
+}
+
 .social-icons {
     margin-bottom: 30px;
     display: flex;
