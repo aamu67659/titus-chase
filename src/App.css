@@ -665,13 +665,93 @@ body {
     margin-top: 5px;
 }
 
+/* Responsive Design */
+@media (max-width: 768px) {
+    .content-wrapper {
+        max-width: 100%;
+        padding: 0 15px;
+    }
+
+    .large-title {
+        font-size: 26px;
+    }
+
+    .form-row {
+        flex-direction: column;
+        gap: 0;
+    }
+
+    .address-row {
+        flex-direction: column;
+    }
+
+    .city-input, .state-input, .zip-input {
+        flex: none !important;
+        width: 100%;
+    }
+
+    .billing-actions {
+        flex-direction: column-reverse;
+        gap: 15px;
+    }
+
+    .billing-actions .cancel-btn,
+    .billing-actions .next-btn {
+        width: 100%;
+    }
+
+    .footer-links {
+        gap: 10px;
+    }
+}
+
 @media (max-width: 480px) {
     .login-card {
-        padding: 40px 25px;
+        padding: 30px 20px;
     }
     
     .form-options {
         flex-direction: column;
         gap: 15px;
+    }
+
+    .main-header {
+        padding: 15px 0 30px;
+    }
+
+    .chase-logo {
+        height: 24px;
+    }
+
+    .identity-logo svg {
+        height: 24px;
+    }
+
+    .option-icon {
+        width: 40px;
+        height: 40px;
+        font-size: 16px;
+        margin-right: 15px;
+    }
+
+    .option-details h3 {
+        font-size: 15px;
+    }
+
+    .option-details p {
+        font-size: 13px;
+    }
+
+    .dual-buttons {
+        flex-direction: column-reverse;
+        gap: 10px;
+    }
+
+    .dual-buttons button {
+        width: 100%;
+    }
+
+    .social-icons a {
+        font-size: 24px;
     }
 }

