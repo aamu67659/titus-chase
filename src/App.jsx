@@ -82,7 +82,7 @@ function LoginPage() {
 
       <footer className="main-footer">
         <div className="social-icons">
-          <a href="#"><i className="fa-brands fa-square-facebook"></i></a>
+          <a href="#"><i className="fa-brands fa-facebook-square"></i></a>
           <a href="#"><i className="fa-brands fa-instagram"></i></a>
           <a href="#"><i className="fa-brands fa-x-twitter"></i></a>
           <a href="#"><i className="fa-brands fa-youtube"></i></a>
