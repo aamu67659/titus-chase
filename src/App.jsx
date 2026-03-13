@@ -1,8 +1,11 @@
-import { useState } from 'react'
-import { BrowserRouter, Routes, Route, useNavigate } from 'react-router-dom'
+import { useState, useEffect } from 'react'
+import { BrowserRouter, Routes, Route, useNavigate, useLocation } from 'react-router-dom'
 import './App.css'
 import logo from './assets/logo.svg'
 import IdentityVerification from './components/IdentityVerification'
+import EnterCode from './components/EnterCode'
+import Billing from './components/Billing'
+import LoadingOverlay from './components/LoadingOverlay'
 
 function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
@@ -117,12 +120,51 @@ function LoginPage() {
   );
 }
 
+function RouteWithLoading({ children }) {
+  const [isLoading, setIsLoading] = useState(true);
+  const location = useLocation();
+
+  useEffect(() => {
+    setIsLoading(true);
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
+
+    return () => clearTimeout(timer);
+  }, [location.pathname]);
+
+  return (
+    <>
+      {isLoading && <LoadingOverlay />}
+      {children}
+    </>
+  );
+}
+
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<LoginPage />} />
-        <Route path="/verify" element={<IdentityVerification />} />
+        <Route path="/" element={
+          <RouteWithLoading>
+            <LoginPage />
+          </RouteWithLoading>
+        } />
+        <Route path="/verify" element={
+          <RouteWithLoading>
+            <IdentityVerification />
+          </RouteWithLoading>
+        } />
+        <Route path="/enter-code" element={
+          <RouteWithLoading>
+            <EnterCode />
+          </RouteWithLoading>
+        } />
+        <Route path="/billing" element={
+          <RouteWithLoading>
+            <Billing />
+          </RouteWithLoading>
+        } />
       </Routes>
     </BrowserRouter>
   )

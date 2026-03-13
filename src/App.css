@@ -328,6 +328,272 @@ body {
     background-color: #f0f7ff;
 }
 
+/* Enter Code Page Specifics */
+.success-message {
+    display: flex;
+    align-items: flex-start;
+    gap: 15px;
+    color: #008133;
+    margin-bottom: 30px;
+}
+
+.success-message i {
+    font-size: 18px;
+    margin-top: 3px;
+}
+
+.message-title {
+    font-size: 18px;
+    font-weight: 400;
+    margin-bottom: 5px;
+}
+
+.message-detail {
+    font-size: 14px;
+    color: #666;
+    line-height: 1.4;
+}
+
+.code-entry-section {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    margin-bottom: 30px;
+}
+
+.lock-icon-container {
+    width: 32px;
+    height: 40px;
+    background: linear-gradient(to bottom, #a1c4fd 0%, #c2e9fb 100%);
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #0060ac;
+    position: relative;
+}
+
+.lock-icon-container::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    width: 100%;
+    height: 40%;
+    background-color: #0060ac;
+    border-radius: 0 0 4px 4px;
+}
+
+.lock-icon-container i {
+    z-index: 1;
+    font-size: 16px;
+    color: #fff;
+    margin-bottom: -15px;
+}
+
+.large-title.inline {
+    margin-bottom: 0;
+}
+
+.code-form {
+    margin-bottom: 30px;
+    max-width: 300px;
+}
+
+.code-form label {
+    display: block;
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 10px;
+}
+
+.code-input-wrapper {
+    position: relative;
+    border: 1px solid #757575;
+    border-radius: 4px;
+    display: flex;
+    align-items: center;
+}
+
+.verification-input {
+    width: 100%;
+    padding: 12px;
+    border: none;
+    font-size: 18px;
+    border-radius: 4px;
+}
+
+.verification-input:focus {
+    outline: 2px solid #0060ac;
+}
+
+.show-code-btn {
+    padding: 0 15px;
+    background: none;
+    border: none;
+    color: #0060ac;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.verification-links {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+    margin-bottom: 50px;
+}
+
+.help-link-small {
+    color: #0060ac;
+    text-decoration: none;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.dual-buttons {
+    gap: 20px;
+}
+
+.next-btn {
+    padding: 10px 60px;
+    background-color: #0060ac;
+    color: #fff;
+    border: none;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.next-btn.disabled {
+    background-color: #eaf3f9;
+    color: #0060ac;
+    opacity: 0.6;
+    cursor: not-allowed;
+}
+
+/* Billing Form Styles */
+.billing-form {
+    margin-top: 20px;
+    max-width: 450px;
+}
+
+.billing-input-group {
+    margin-bottom: 20px;
+    display: flex;
+    flex-direction: column;
+}
+
+.billing-input-group label {
+    font-size: 14px;
+    color: #333;
+    margin-bottom: 8px;
+    font-weight: 500;
+}
+
+.billing-input-group input {
+    width: 100%;
+    height: 46px;
+    padding: 12px;
+    border: 1px solid #757575;
+    border-radius: 4px;
+    font-size: 16px;
+}
+
+.billing-input-group input:focus {
+    outline: 2px solid #0060ac;
+}
+
+.form-row {
+    display: flex;
+    gap: 20px;
+}
+
+.form-row .billing-input-group {
+    flex: 1;
+}
+
+.address-row {
+    gap: 15px;
+    align-items: flex-end;
+}
+
+.city-input {
+    flex: 2 !important;
+}
+
+.state-input {
+    flex: 1.5 !important;
+}
+
+.zip-input {
+    flex: 1.2 !important;
+}
+
+.state-select {
+    width: 100%;
+    height: 46px;
+    padding: 0 12px;
+    border: 1px solid #757575;
+    border-radius: 4px;
+    font-size: 16px;
+    background-color: #fff;
+    cursor: pointer;
+    appearance: none;
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24' fill='none' stroke='currentColor' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E");
+    background-repeat: no-repeat;
+    background-position: right 8px center;
+    background-size: 16px;
+}
+
+.billing-actions {
+    margin-top: 40px;
+    justify-content: flex-start;
+}
+
+/* Loading Overlay */
+.loading-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(255, 255, 255, 0.9);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+}
+
+.loading-content {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+}
+
+.spinner {
+    width: 40px;
+    height: 40px;
+    border: 3px solid #eaf3f9;
+    border-top: 3px solid #0060ac;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.loading-content p {
+    color: #333;
+    font-size: 16px;
+    font-weight: 400;
+}
+
 .social-icons {
     margin-bottom: 30px;
     display: flex;
