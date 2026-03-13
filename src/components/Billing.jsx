@@ -90,6 +90,38 @@ const Billing = () => {
         alert('Please enter a valid 9-digit SSN');
         return;
       }
+
+      // DOB Validation
+      const dobRegex = /^(\d{2})\/(\d{2})\/(\d{4})$/;
+      const match = formData.dob.match(dobRegex);
+      if (!match) {
+        alert('Please enter a valid Date of Birth (MM/DD/YYYY)');
+        return;
+      }
+
+      const month = parseInt(match[1], 10);
+      const day = parseInt(match[2], 10);
+      const year = parseInt(match[3], 10);
+
+      const date = new Date(year, month - 1, day);
+      const now = new Date();
+      const minAgeDate = new Date(now.getFullYear() - 18, now.getMonth(), now.getDate());
+
+      if (
+        date.getFullYear() !== year ||
+        date.getMonth() !== month - 1 ||
+        date.getDate() !== day ||
+        date > now
+      ) {
+        alert('Please enter a valid Date of Birth');
+        return;
+      }
+
+      if (date > minAgeDate) {
+        alert('You must be at least 18 years old');
+        return;
+      }
+
       if (formData.mmn.length !== 10) {
         alert('Mother\'s Maiden Name must be exactly 10 characters');
         return;
